@@ -6,7 +6,7 @@ export const siteConfig = {
   description:
     "Cafeteria e torrefação de cafés especiais em São José, SC. Café torrado por nós, pão de queijo artesanal, cursos de café e venda de grãos para todo o Brasil.",
   // TODO: trocar pela URL final quando o domínio for registrado.
-  url: "https://matheuss7.github.io/coffebody",
+  url: "https://matheuss7.github.io/coffeebody",
   locale: "pt_BR",
 } as const;
 

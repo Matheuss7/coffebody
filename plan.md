@@ -119,7 +119,7 @@ Troca consciente: site no ar em ~1 semana em vez de ~3 meses, e valida demanda o
 ## 7. Estrutura do repositório
 
 ```
-coffebody/                 ← repositório
+coffeebody/                 ← repositório
   README.md                visão geral
   plan.md                  ← este arquivo
   docs/                    identidade visual: logo, ícone, wordmark, favicon e manual

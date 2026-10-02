@@ -2,7 +2,7 @@
 
 Site e identidade visual da **Coffee Body** — cafeteria e torrefação de cafés especiais em São José, Santa Catarina.
 
-🌐 **Site:** https://matheuss7.github.io/coffebody
+🌐 **Site:** https://matheuss7.github.io/coffeebody
 📍 R. Irmãos Vieira, 967 — loja 02, São José/SC · Seg a Sáb, 9h às 18h
 📸 [@coffeebody.sc](https://www.instagram.com/coffeebody.sc/)
 

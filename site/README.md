@@ -1,6 +1,6 @@
 # Coffee Body — site
 
-Parte do repositório [coffebody](../README.md). A identidade visual fica em [`../docs/`](../docs/).
+Parte do repositório [coffeebody](../README.md). A identidade visual fica em [`../docs/`](../docs/).
 
 Site institucional e loja-vitrine da **Coffee Body®**, cafeteria e torrefação de cafés especiais em São José (SC).
 
@@ -21,7 +21,7 @@ npm install
 npm run dev          # http://localhost:3000
 npm run lint
 npm run build        # export em ./out
-npm run build:pages  # export com basePath /coffebody (GitHub Pages)
+npm run build:pages  # export com basePath /coffeebody (GitHub Pages)
 ```
 
 ## Estrutura

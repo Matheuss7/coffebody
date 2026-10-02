@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const isGithubPages = process.env.GITHUB_PAGES === "true";
 // Precisa bater com o nome do repositório no GitHub.
-const repository = "coffebody";
+const repository = "coffeebody";
 
 const nextConfig: NextConfig = {
   output: "export",
