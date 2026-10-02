@@ -5,8 +5,9 @@ export const siteConfig = {
   title: "Coffee Body | Cafeteria e Torrefação de Cafés Especiais em São José — SC",
   description:
     "Cafeteria e torrefação de cafés especiais em São José, SC. Café torrado por nós, pão de queijo artesanal, cursos de café e venda de grãos para todo o Brasil.",
-  // TODO: trocar pela URL final quando o domínio for registrado.
-  url: "https://matheuss7.github.io/coffeebody",
+  // Em produção vem de NEXT_PUBLIC_SITE_URL (https://www.coffeebody.com.br).
+  // Sem a variável, vale o endereço provisório do GitHub Pages.
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://matheuss7.github.io/coffeebody",
   locale: "pt_BR",
 } as const;
 

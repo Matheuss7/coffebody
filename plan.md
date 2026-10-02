@@ -49,7 +49,7 @@ A frente de atacado é a que mais combina com "compra e venda" e normalmente é 
 | Tipo de site | Estático — Next.js `output: "export"` (mesmo padrão do FSO) |
 | Checkout | Botão "Pedir" → WhatsApp com mensagem pré-preenchida + link de pagamento (PIX/cartão) |
 | Stack | Next.js 16 · React 19 · Tailwind 4 · TypeScript · react-icons |
-| Hospedagem | GitHub Pages na fase 1 → S3 + CloudFront + domínio próprio na fase 3 |
+| Hospedagem | GitHub Pages enquanto provisório → Cloudflare Pages com domínio próprio (`www.coffeebody.com.br`) |
 | CI/CD | GitHub Actions (lint + build no PR, deploy na main) |
 | Idioma | pt-BR apenas na fase 1 |
 
@@ -275,11 +275,11 @@ Analytics: Plausible ou GA4, com evento em cada clique de WhatsApp separado por 
 
 ## 12. Deploy
 
-**Fase 1 — GitHub Pages.** `npm run build:pages` com `basePath`, artifact pro Pages, workflow igual ao do FSO.
+**Provisório — GitHub Pages.** `npm run build:pages` com `basePath`, publicado em https://matheuss7.github.io/coffeebody/. Os termos do GitHub Pages não permitem uso como loja, então serve só até o domínio existir.
 
-**Fase 3 — AWS.** S3 privado + CloudFront + OAC + ACM + Route53, em Terraform. O diagrama `docs/diagrams/frontend-estatico-aws.drawio` do projeto FSO já descreve a topologia — reaproveitar.
+**Definitivo — Cloudflare Pages.** `npm run build` (sem `basePath`) com `NEXT_PUBLIC_SITE_URL=https://www.coffeebody.com.br`. TLS, CDN e cabeçalhos de segurança (`site/public/_headers`) por conta da Cloudflare, sem servidor para manter. DNS do `.com.br` delegado do Registro.br para a Cloudflare, e regra de redirecionamento levando `coffeebody.com.br` e qualquer `http://` para `https://www.coffeebody.com.br`.
 
-Domínio: registrar `coffeebody.com.br` (verificar disponibilidade) — e-mail profissional no mesmo domínio.
+Domínio: `coffeebody.com.br` no Registro.br. Opcional: `coffebody.com.br` (erro de digitação comum) só redirecionando. `coffeebody.com` já tem dono.
 
 ---
 
@@ -290,8 +290,8 @@ Domínio: registrar `coffeebody.com.br` (verificar disponibilidade) — e-mail p
 | **0 — Hoje** | Consertar link da bio (WhatsApp direto) · reivindicar Google Business Profile · registrar domínio · coletar logo, paleta, fotos, cardápio, lista de cafés e preços | 1–3 dias |
 | **1 — Site no ar** | Scaffold + Home + `/cafes` + `/cafes/[slug]` + `/visite` + legais, publicado no Pages, link na bio apontando pra ele | ~1 semana |
 | **2 — Receita completa** | `/cardapio` · `/atacado` com formulário · `/cursos` · JSON-LD · analytics | ~1 semana |
-| **3 — Infra própria** | Domínio + S3/CloudFront/ACM via Terraform, e-mail profissional, OG images finais | ~1 semana |
-| **4 — Commerce real** | Carrinho (Snipcart) ou Medusa, frete calculado, cobrança recorrente do clube (a página `/clube` já capta pelo WhatsApp, sem billing automático), CMS leve pro cardápio | avaliar com tração |
+| **3 — Infra própria** | Domínio + Cloudflare Pages + redirecionamentos, e-mail profissional, OG images finais | ~2 dias depois do domínio registrado |
+| **4 — Commerce real** | Estoque dos donos em `/estoque` (Supabase) · carrinho e pagamento por Mercado Pago Checkout Pro · frete calculado · cobrança recorrente do clube (Asaas) · CMS leve pro cardápio | em etapas, ver seção 16 |
 
 ---
 
@@ -333,3 +333,55 @@ Pendente:
 5. Criar repositório no GitHub e ligar o Pages
 6. Revisão jurídica das páginas de privacidade e trocas
 7. Depois, quando fizer sentido: link da bio e Google Business Profile
+
+---
+
+## 16. Mapa de ações (atualizado em 2026-10-02)
+
+Quatro trilhas. As de cima destravam as de baixo. **[dono]** é o que só os donos conseguem fazer (conta, compra, decisão). **[código]** é trabalho no repositório.
+
+### Trilha A — Endereço definitivo
+
+| # | Ação | Quem | Depende de | Estado |
+|---|------|------|-----------|--------|
+| A1 | Registrar `coffeebody.com.br` no Registro.br (opcional: `coffebody.com.br`) | dono | — | pendente |
+| A2 | Criar conta na Cloudflare e adicionar o domínio | dono | A1 | pendente |
+| A3 | Site pronto para trocar de endereço: URL por variável, cabeçalhos de segurança | código | — | feito |
+| A4 | Projeto na Cloudflare Pages ligado ao repositório, DNS, HTTPS, redirecionamentos | código | A1, A2 | pendente |
+| A5 | Desligar o GitHub Pages e apontar a bio do Instagram para o domínio | código + dono | A4 | pendente |
+
+### Trilha B — Conteúdo real
+
+| # | Ação | Quem | Estado |
+|---|------|------|--------|
+| B1 | Número de WhatsApp comercial em `site/lib/site.ts` — sem ele nenhum botão de pedido funciona | dono | pendente |
+| B2 | Cafés reais com preço por peso em `data/products.ts` | dono informa, código aplica | pendente |
+| B3 | Fotos dos cafés e da loja, foto do hero, `og-image.png` | dono | pendente |
+| B4 | Confirmar endereço, horário, e-mail e HEX oficiais da marca | dono | pendente |
+| B5 | Revisão das páginas de privacidade e trocas | dono | pendente |
+
+### Trilha C — Estoque dos donos
+
+| # | Ação | Quem | Depende de | Estado |
+|---|------|------|-----------|--------|
+| C1 | Esquema do banco: grão verde, torrado, pacotes, vendas, etiquetas, embalagens | código | — | feito (`supabase/migrations/`) |
+| C2 | Decisões de operação: quem são os donos, como a venda é lançada, moagem, consumo da cafeteria | dono | — | pendente |
+| C3 | Criar o projeto no Supabase e cadastrar os e-mails dos donos | dono | — | pendente |
+| C4 | Tela `/estoque` com login: saldos, entrada de lote, torra, empacotamento, venda, ajustes | código | C2 | pendente |
+| C5 | Ligar a tela ao Supabase de produção e carregar o saldo inicial | código + dono | C3, C4 | pendente |
+| C6 | `disponivel` do catálogo lido do saldo de pacotes, em vez de editado à mão | código | C5 | pendente |
+
+### Trilha D — Venda com pagamento no site
+
+| # | Ação | Quem | Depende de | Estado |
+|---|------|------|-----------|--------|
+| D1 | Conta Mercado Pago da empresa e credenciais de teste | dono | — | pendente |
+| D2 | Política de frete (Correios, entrega local, retirada) | dono | — | pendente |
+| D3 | Carrinho no site | código | — | pendente |
+| D4 | Função que cria o pagamento com o preço calculado no servidor, e webhook com assinatura validada | código | A4, D1 | pendente |
+| D5 | Pedido pago baixa o estoque de pacotes | código | C5, D4 | pendente |
+| D6 | Emissão de NF-e e termos de compra | dono | D4 | pendente |
+
+Depois, quando houver tração: cobrança recorrente do clube e boleto de atacado (Asaas), analytics com evento por clique de WhatsApp, CMS leve para o cardápio.
+
+Ordem prática: A3 e C1 já saíram. A1, A2, B1, C2 e C3 são rápidas e destravam quase tudo. C4 pode ser construída contra um banco local enquanto as contas não existem.
