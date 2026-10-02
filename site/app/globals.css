@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/*
+  PALETA DA MARCA — lida do logo oficial
+  (`identidade visual/00 - origem/logo-coffee-body-vertical-fundo-verde.jpeg`).
+
+  O arquivo está em CMYK, com perfil genérico — é um arquivo de impressão.
+  Estes valores são o que o navegador mostra ao abrir esse JPEG com gestão de
+  cor, ou seja, o verde que a marca tem na tela:
+
+    fundo da marca   #1e5c42   → brand / forest
+    folha            #708768   → leaf
+    cereja           #783537   → cherry
+
+  `brand-light` é um menta claro derivado do mesmo matiz: a folha não passa em
+  contraste como texto pequeno sobre o verde.
+*/
+@theme {
+  --color-bone: #f9f7f2;
+  --color-sand: #e4e0d4;
+  --color-wood: #c5a894;
+
+  --color-ink: #12241c;
+  --color-forest: #1e5c42;
+  --color-moss: #2a7a58;
+  --color-muted: #5c6f64;
+
+  --color-brand: #1e5c42;
+  --color-brand-dark: #164535;
+  --color-brand-light: #9ad3b4;
+  --color-leaf: #708768;
+
+  --color-cherry: #783537;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-160%);
+  border-radius: 0.75rem;
+  background: var(--color-bone);
+  padding: 0.75rem 1rem;
+  color: var(--color-brand-dark);
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(22, 36, 28, 0.18);
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Textura sutil para seções escuras. */
+.grain {
+  background-image: radial-gradient(
+    rgba(247, 244, 239, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 14px 14px;
+}
+
+/*
+  Revelação ao rolar.
+
+  O estado escondido só vale sob `html.js` — sem JavaScript o conteúdo aparece
+  normalmente, e nenhum texto some do HTML estático.
+*/
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js [data-reveal][data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Faixa em movimento contínuo (a lista é duplicada no componente). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Convite de rolagem no hero. */
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
